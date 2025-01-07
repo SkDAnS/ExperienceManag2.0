@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Path("/status")
 public class statusResource {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/management_exp"; // URL de la base
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/projet"; // URL de la base
     private static final String DB_USER = "admin"; // Nom d'utilisateur
     private static final String DB_PASSWORD = "1234"; // Mot de passe
 
@@ -73,4 +73,8 @@ public class statusResource {
 
         return tableCounts;
     }
+
+
+
+
 }
