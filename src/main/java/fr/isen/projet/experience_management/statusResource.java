@@ -1,54 +1,76 @@
 package fr.isen.projet.experience_management;
-//Mettez le nom et le chemin de votre dossier
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.sql.DataSource;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-
 @Path("/status")
 public class statusResource {
-    @Inject
-    DataSource dataSource; // Injection de la DataSource
+
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/management_exp"; // URL de la base
+    private static final String DB_USER = "admin"; // Nom d'utilisateur
+    private static final String DB_PASSWORD = "1234"; // Mot de passe
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public String getStatus() throws JsonProcessingException {
-        String state = "OK"; // État OK par défaut
+        String state = "OK"; // OK, KO ou Dégradé
         String version = "1.0";
-        int count = 0; // Initialisation du compteur des lignes
 
-        // Requête SQL pour compter les lignes dans une table
-        String query = "SELECT COUNT(*) AS row_count FROM MemoryCategory"; // Remplace 'utilisateurs' par le nom de ta table
-
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-
-            if (rs.next()) {
-                count = rs.getInt("row_count"); // Récupération du résultat de la requête
-            }
-
+        Map<String, Long> tableCounts = new HashMap<>();
+        try {
+            tableCounts = getTableCounts();
         } catch (Exception e) {
+            state = "KO"; // Indiquer une erreur si la base de données ne répond pas
             e.printStackTrace();
-            state = "KO"; // Si une erreur se produit, on retourne l'état KO
         }
 
         Map<String, Object> statusResponse = new HashMap<>();
         statusResponse.put("state", state);
-        statusResponse.put("count", count);
         statusResponse.put("version", version);
+        statusResponse.put("tableCounts", tableCounts);
 
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(statusResponse);
     }
 
+    private Map<String, Long> getTableCounts() throws Exception {
+        Map<String, Long> tableCounts = new HashMap<>();
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            // Récupérer la liste des tables
+            try (Statement tableStatement = connection.createStatement();
+                 ResultSet tables = tableStatement.executeQuery("SHOW TABLES")) {
+
+                while (tables.next()) {
+                    String tableName = tables.getString(1);
+
+                    // Effectuer un COUNT() pour chaque table avec une nouvelle instance de Statement
+                    try (Statement countStatement = connection.createStatement();
+                         ResultSet countResult = countStatement.executeQuery("SELECT COUNT(*) FROM `" + tableName + "`")) {
+
+                        if (countResult.next()) {
+                            tableCounts.put(tableName, countResult.getLong(1));
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Erreur lors du comptage pour la table " + tableName + ": " + e.getMessage());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la connexion ou de l'exécution de la requête : " + e.getMessage());
+            throw e;
+        }
+
+        return tableCounts;
+    }
 }
