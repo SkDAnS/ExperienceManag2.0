@@ -30,6 +30,6 @@ public interface MemoryService {
 //begin of modifiable zone(Javadoc).......C/833c1d4f-44c6-4f58-9322-6a6aef146c52
 
 //end of modifiable zone(Javadoc).........E/833c1d4f-44c6-4f58-9322-6a6aef146c52
-    MemoryModel getMemoryById(final int id);
+    MemoryModel getMemoryById(final String id);
 
 }

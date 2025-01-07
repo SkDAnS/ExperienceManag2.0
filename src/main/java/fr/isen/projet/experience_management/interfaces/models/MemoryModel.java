@@ -11,7 +11,7 @@ public class MemoryModel {
 //begin of modifiable zone(Javadoc).......C/72c5292a-d5f0-4ee0-9313-5034070a95c6
 
 //end of modifiable zone(Javadoc).........E/72c5292a-d5f0-4ee0-9313-5034070a95c6
-    private int idMemory;
+    private String idMemory;
 
 //begin of modifiable zone(Javadoc).......C/6f777f6d-d21d-45d8-85a7-49a363551e61
 
@@ -66,12 +66,12 @@ public class MemoryModel {
 //begin of modifiable zone(Javadoc).......C/06feade9-be04-4d6d-8315-9c30d7753600
 
 //end of modifiable zone(Javadoc).........E/06feade9-be04-4d6d-8315-9c30d7753600
-    private int idOrder;
+    private String idOrder;
 
 //begin of modifiable zone(Javadoc).......C/6905a2af-d2dd-4d6d-9a7f-8e9a52acea48
 
 //end of modifiable zone(Javadoc).........E/6905a2af-d2dd-4d6d-9a7f-8e9a52acea48
-    private int idUser;
+    private String idUser;
 
 //begin of modifiable zone(Javadoc).......C/4dedfb37-8ddd-462a-b630-535b5171c301
 

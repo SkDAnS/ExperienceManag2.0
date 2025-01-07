@@ -15,12 +15,12 @@ public interface FeedbackService {
 //begin of modifiable zone(Javadoc).......C/0d7f1ab2-0ea5-411f-9bba-5c8dedeadae5
 
 //end of modifiable zone(Javadoc).........E/0d7f1ab2-0ea5-411f-9bba-5c8dedeadae5
-    FeedbackModel getFeedbackById(final int id);
+    FeedbackModel getFeedbackById(final String id);
 
 //begin of modifiable zone(Javadoc).......C/6f00387b-ae03-4ce7-b6d9-a0e2cd336754
 
 //end of modifiable zone(Javadoc).........E/6f00387b-ae03-4ce7-b6d9-a0e2cd336754
-    int addFeedback(final FeedbackModel feedback);
+    String addFeedback(final FeedbackModel feedback);
 
 //begin of modifiable zone(Javadoc).......C/3b0c6d19-7766-4d90-b182-beb33b1b66e2
 

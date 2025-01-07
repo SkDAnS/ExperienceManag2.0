@@ -11,7 +11,7 @@ public class FeedbackModel {
 //begin of modifiable zone(Javadoc).......C/1d4aba97-a328-4873-8d23-8c283eb66ee5
 
 //end of modifiable zone(Javadoc).........E/1d4aba97-a328-4873-8d23-8c283eb66ee5
-    private int idFeedback;
+    private String idFeedback;
 
 //begin of modifiable zone(Javadoc).......C/10ab28bf-2ce9-425f-88fe-1bd409b39c75
 
@@ -21,7 +21,7 @@ public class FeedbackModel {
 //begin of modifiable zone(Javadoc).......C/d979580d-fd68-4c75-90ca-9ce61a8dab21
 
 //end of modifiable zone(Javadoc).........E/d979580d-fd68-4c75-90ca-9ce61a8dab21
-    public Date creationDate;
+    public Date dateCreated;
 
 //begin of modifiable zone(Javadoc).......C/22f82b11-e1a1-417c-9f2e-d4dc66904b63
 
@@ -46,17 +46,17 @@ public class FeedbackModel {
 //begin of modifiable zone(Javadoc).......C/bf42f0dc-cb9d-40c2-b80e-d870f48b6a73
 
 //end of modifiable zone(Javadoc).........E/bf42f0dc-cb9d-40c2-b80e-d870f48b6a73
-    public Date updateDate;
+    public Date dateUpdated;
 
 //begin of modifiable zone(Javadoc).......C/d4a90ed6-79f4-43b2-a6c3-b409479650fa
 
 //end of modifiable zone(Javadoc).........E/d4a90ed6-79f4-43b2-a6c3-b409479650fa
-    private int idUser;
+    private String idUser;
 
 //begin of modifiable zone(Javadoc).......C/28a9d2d8-e593-4b4e-9cb7-582f71df3620
 
 //end of modifiable zone(Javadoc).........E/28a9d2d8-e593-4b4e-9cb7-582f71df3620
-    private int idOrder;
+    private String idOrder;
 
 //begin of modifiable zone(Javadoc).......C/31101eaf-2413-4cac-bb0c-d9c0fbb2fa83
 
