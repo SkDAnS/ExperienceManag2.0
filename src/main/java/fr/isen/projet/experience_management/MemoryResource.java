@@ -74,50 +74,60 @@ public class MemoryResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createMemory(Map<String, Object> memoryData) throws JsonProcessingException {
-        String title = (String) memoryData.get("title");
-        int category = (Integer) memoryData.get("category");
-        String description = (String) memoryData.get("description");
-        String place = (String) memoryData.get("place");
-        String hashtag = (String) memoryData.get("hashtag");
-        int share = (Integer) memoryData.get("share");
-        String tag = (String) memoryData.get("tag");
-        String idOrder = (String) memoryData.get("idOrder");
-        String idUser = (String) memoryData.get("idUser");
+        try {
+            String title = (String) memoryData.get("title");
+            Integer category = (Integer) memoryData.get("category");
+            String description = (String) memoryData.get("description");
+            String place = (String) memoryData.get("place");
+            String hashtag = (String) memoryData.get("hashtag");
+            Integer share = (Integer) memoryData.get("share");
+            String tag = (String) memoryData.get("tag");
+            String idOrder = (String) memoryData.get("idOrder");
+            String idUser = (String) memoryData.get("idUser");
+            String image = (String) memoryData.get("image");
 
-        String idMemory = java.util.UUID.randomUUID().toString();
-        String publicationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")); // Format compatible avec MySQL
+            if (title == null || category == null || description == null || place == null || share == null || idUser == null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"message\":\"Missing required fields!\"}")
+                        .build();
+            }
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "INSERT INTO MemoryModel (idMemory, title, publicationDate, category, description, place, hashtag, share, tag, idOrder, idUser) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1, idMemory);
-                preparedStatement.setString(2, title);
-                preparedStatement.setString(3, publicationDate);
-                preparedStatement.setInt(4, category);
-                preparedStatement.setString(5, description);
-                preparedStatement.setString(6, place);
-                preparedStatement.setString(7, hashtag);
-                preparedStatement.setInt(8, share);
-                preparedStatement.setString(9, tag);
-                preparedStatement.setString(10, idOrder);
-                preparedStatement.setString(11, idUser);
+            String idMemory = java.util.UUID.randomUUID().toString();
+            String publicationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                int rowsAffected = preparedStatement.executeUpdate();
-                if (rowsAffected > 0) {
-                    return Response.status(Response.Status.CREATED)
-                            .entity("{\"message\":\"Memory created successfully!\",\"idMemory\":\"" + idMemory + "\"}")
-                            .build();
-                } else {
-                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                            .entity("{\"message\":\"Error creating memory!\"}")
-                            .build();
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+                String sql = "INSERT INTO MemoryModel (idMemory, title, publicationDate, category, description, place, hashtag, share, tag, idOrder, idUser, image) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                    preparedStatement.setString(1, idMemory);
+                    preparedStatement.setString(2, title);
+                    preparedStatement.setString(3, publicationDate);
+                    preparedStatement.setInt(4, category);
+                    preparedStatement.setString(5, description);
+                    preparedStatement.setString(6, place);
+                    preparedStatement.setString(7, hashtag);
+                    preparedStatement.setInt(8, share);
+                    preparedStatement.setString(9, tag);
+                    preparedStatement.setString(10, idOrder);
+                    preparedStatement.setString(11, idUser);
+                    preparedStatement.setString(12, image);
+
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    if (rowsAffected > 0) {
+                        return Response.status(Response.Status.CREATED)
+                                .entity("{\"message\":\"Memory created successfully!\",\"idMemory\":\"" + idMemory + "\"}")
+                                .build();
+                    } else {
+                        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                                .entity("{\"message\":\"Error creating memory!\"}")
+                                .build();
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"message\":\"Error with database connection!\"}")
+                    .entity("{\"message\":\"Error processing request!\"}")
                     .build();
         }
     }
@@ -127,48 +137,58 @@ public class MemoryResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateMemory(@PathParam("idMemory") String idMemory, Map<String, Object> memoryData) throws JsonProcessingException {
-        String title = (String) memoryData.get("title");
-        String publicationDate = (String) memoryData.get("publicationDate");
-        int category = (Integer) memoryData.get("category");
-        String description = (String) memoryData.get("description");
-        String place = (String) memoryData.get("place");
-        String hashtag = (String) memoryData.get("hashtag");
-        int share = (Integer) memoryData.get("share");
-        String tag = (String) memoryData.get("tag");
-        String idOrder = (String) memoryData.get("idOrder");
-        String idUser = (String) memoryData.get("idUser");
+        try {
+            String title = (String) memoryData.get("title");
+            String publicationDate = (String) memoryData.get("publicationDate");
+            Integer category = (Integer) memoryData.get("category");
+            String description = (String) memoryData.get("description");
+            String place = (String) memoryData.get("place");
+            String hashtag = (String) memoryData.get("hashtag");
+            Integer share = (Integer) memoryData.get("share");
+            String tag = (String) memoryData.get("tag");
+            String idOrder = (String) memoryData.get("idOrder");
+            String idUser = (String) memoryData.get("idUser");
+            String image = (String) memoryData.get("image");
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "UPDATE MemoryModel SET title = ?, publicationDate = ?, category = ?, description = ?, place = ?, hashtag = ?, "
-                    + "share = ?, tag = ?, idOrder = ?, idUser = ? WHERE idMemory = ?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1, title);
-                preparedStatement.setString(2, publicationDate);
-                preparedStatement.setInt(3, category);
-                preparedStatement.setString(4, description);
-                preparedStatement.setString(5, place);
-                preparedStatement.setString(6, hashtag);
-                preparedStatement.setInt(7, share);
-                preparedStatement.setString(8, tag);
-                preparedStatement.setString(9, idOrder);
-                preparedStatement.setString(10, idUser);
-                preparedStatement.setString(11, idMemory);
+            if (title == null || category == null || description == null || place == null || share == null || idUser == null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"message\":\"Missing required fields!\"}")
+                        .build();
+            }
 
-                int rowsAffected = preparedStatement.executeUpdate();
-                if (rowsAffected > 0) {
-                    return Response.status(Response.Status.OK)
-                            .entity("{\"message\":\"Memory updated successfully!\"}")
-                            .build();
-                } else {
-                    return Response.status(Response.Status.NOT_FOUND)
-                            .entity("{\"message\":\"Memory not found!\"}")
-                            .build();
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+                String sql = "UPDATE MemoryModel SET title = ?, publicationDate = ?, category = ?, description = ?, place = ?, hashtag = ?, "
+                        + "share = ?, tag = ?, idOrder = ?, idUser = ?, image = ? WHERE idMemory = ?";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                    preparedStatement.setString(1, title);
+                    preparedStatement.setString(2, publicationDate);
+                    preparedStatement.setInt(3, category);
+                    preparedStatement.setString(4, description);
+                    preparedStatement.setString(5, place);
+                    preparedStatement.setString(6, hashtag);
+                    preparedStatement.setInt(7, share);
+                    preparedStatement.setString(8, tag);
+                    preparedStatement.setString(9, idOrder);
+                    preparedStatement.setString(10, idUser);
+                    preparedStatement.setString(11, image);
+                    preparedStatement.setString(12, idMemory);
+
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    if (rowsAffected > 0) {
+                        return Response.status(Response.Status.OK)
+                                .entity("{\"message\":\"Memory updated successfully!\"}")
+                                .build();
+                    } else {
+                        return Response.status(Response.Status.NOT_FOUND)
+                                .entity("{\"message\":\"Memory not found!\"}")
+                                .build();
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"message\":\"Error with database connection!\"}")
+                    .entity("{\"message\":\"Error processing request!\"}")
                     .build();
         }
     }
@@ -196,7 +216,7 @@ public class MemoryResource {
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"message\":\"Error with database connection!\"}")
+                    .entity("{\"message\":\"Error processing request!\"}")
                     .build();
         }
     }
@@ -299,6 +319,5 @@ public class MemoryResource {
         }
     }
 }
-
 
 

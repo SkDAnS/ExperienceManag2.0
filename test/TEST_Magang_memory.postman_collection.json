@@ -43,7 +43,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/memory/d6f03235-cd9d-11ef-a10d-88a4c2dd7980",
+					"raw": "http://localhost:8081/memory/b3fd1ab3-6477-4f12-9e98-10c7ad33a240",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -51,7 +51,7 @@
 					"port": "8081",
 					"path": [
 						"memory",
-						"d6f03235-cd9d-11ef-a10d-88a4c2dd7980"
+						"b3fd1ab3-6477-4f12-9e98-10c7ad33a240"
 					]
 				}
 			},
@@ -64,7 +64,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \" pomme\",\r\n    \"category\": 1,\r\n    \"description\": \"This is a description of the memory.\",\r\n    \"place\": \"pommeland\",\r\n    \"hashtag\": \"#memory\",\r\n    \"share\": 2,\r\n    \"tag\": \"tag1,tag2\",\r\n    \"idOrder\": \"12345\",\r\n    \"idUser\": \"67890\"\r\n}\r\n",
+					"raw": "{\r\n    \"title\": \" pouire\",\r\n    \"category\": 1,\r\n    \"description\": \"This is a description of the memory.\",\r\n    \"image\" : \"https://www.anthedesign.fr/wp-content/uploads/2017/01/Futura-sciences-e1485021154215.jpg\",\r\n    \"place\": \"pommeland\",\r\n    \"hashtag\": \"#memory\",\r\n    \"share\": 2,\r\n    \"tag\": \"tag1,tag2\",\r\n    \"idOrder\": \"12345\",\r\n    \"idUser\": \"67890\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -92,7 +92,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"test put test\",\r\n    \"image\": \"test.jpg\",\r\n    \"publicationDate\": \"2025-01-10\",\r\n    \"category\": 1,\r\n    \"description\": \"A beautiful day in Paris.\",\r\n    \"place\": \"Paris\",\r\n    \"hashtag\": \"#travel\",\r\n    \"share\": 1,\r\n    \"tag\": \"vacation,paris\",\r\n    \"idOrder\": \"order15\",\r\n    \"idUser\": \"user20\"\r\n}",
+					"raw": "\r\n\r\n{\r\n    \"title\": \"Titre mis à jour\",\r\n    \"publicationDate\": \"2025-01-08\",\r\n    \"category\": 1,\r\n    \"description\": \"Nouvelle description mise à jour\",\r\n    \"place\": \"Nouvel emplacement\",\r\n    \"hashtag\": \"#nouveaumot\",\r\n    \"share\": 1,\r\n    \"tag\": \"nouveautag\",\r\n    \"idOrder\": \"12345\",\r\n    \"idUser\": \"67890\",\r\n    \"image\": \"https://static.vecteezy.com/ti/photos-gratuite/t2/36324708-ai-genere-image-de-une-tigre-en-marchant-dans-le-foret-photo.jpg\"\r\n}\r\n\r\n\r\n\r\n\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -100,7 +100,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/memory/043cab82-cd0e-11ef-a10d-88a4c2dd7980",
+					"raw": "http://localhost:8081/memory/b3fd1ab3-6477-4f12-9e98-10c7ad33a240",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -108,7 +108,7 @@
 					"port": "8081",
 					"path": [
 						"memory",
-						"043cab82-cd0e-11ef-a10d-88a4c2dd7980"
+						"b3fd1ab3-6477-4f12-9e98-10c7ad33a240"
 					]
 				}
 			},
@@ -129,7 +129,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/memory/043cab82-cd0e-11ef-a10d-88a4c2dd7980",
+					"raw": "http://localhost:8081/memory/46fb4107-87dc-44eb-af0e-852be3e08afd",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -137,7 +137,7 @@
 					"port": "8081",
 					"path": [
 						"memory",
-						"043cab82-cd0e-11ef-a10d-88a4c2dd7980"
+						"46fb4107-87dc-44eb-af0e-852be3e08afd"
 					]
 				}
 			},
