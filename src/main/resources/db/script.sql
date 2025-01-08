@@ -1,4 +1,5 @@
-create database if not exists projet;
+CREATE DATABASE IF NOT EXISTS projet;
+
 USE projet;
 
 -- Apartments & Availability
@@ -461,7 +462,7 @@ INSERT INTO MemoryModel (idMemory, title, publicationDate, category, views, imag
 (UUID(), 'Family Reunion', '2024-12-05', 1, 100, 'family.jpg', 'A wonderful time with family.', 'Home', '#family', 2, 'reunion,family', 'order8', 'user5', FALSE),
 (UUID(), 'Beach Party', '2024-11-30', 3, 220, 'beach.jpg', 'Enjoyed the sunshine and waves.', 'Malibu', '#beach', 1, 'party,beach', 'order9', 'user6', FALSE),
 (UUID(), 'Conference Talk', '2024-11-25', 2, 160, 'conference.jpg', 'Gave a talk on technology trends.', 'Convention Center', '#conference', 2, 'talk,conference', 'order10', 'user7', FALSE),
-(UUID(), 'Birthday Celebration', '2024-11-20', 4, 140, 'birthday.jpg', 'Celebrated my 30th birthday.', 'Banquet Hall', '#birthday', 1, 'celebration,birthday', 'order11', 'user8', FALSE),
+(UUID(), 'Birthday Celebration', '2024-11-20', 4, 140, 'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg<separationlienimage>https://cdn.futura-sciences.com/cdn-cgi/image/width=1024,quality=50,format=auto/sources/images/AI-creation.jpg<separationlienimage>https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp', 'Celebrated my 30th birthday.', 'Banquet Hall', '#birthday', 1, 'celebration,birthday', 'order11', 'user8', FALSE),
 (UUID(), 'Camping Trip', '2024-11-15', 3, 190, 'camping.jpg', 'Stayed under the stars.', 'National Park', '#camping', 1, 'trip,camping', 'order12', 'user9', FALSE),
 (UUID(), 'Art Exhibition', '2024-11-10', 4, 110, 'art.jpg', 'Visited an inspiring art exhibition.', 'City Gallery', '#art', 2, 'exhibition,art', 'order13', 'user10', FALSE);
 
