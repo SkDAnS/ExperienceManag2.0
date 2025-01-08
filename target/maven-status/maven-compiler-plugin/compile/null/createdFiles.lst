@@ -1,9 +1,9 @@
 fr\isen\projet\experience_management\interfaces\models\enums\SHARE.class
+fr\isen\projet\experience_management\interfaces\models\enums\REVIEW.class
+fr\isen\projet\experience_management\interfaces\models\enums\MEMORYCATEGORY.class
 fr\isen\projet\experience_management\interfaces\models\enums\FEEDBACKCATEGORY.class
 fr\isen\projet\experience_management\statusResource.class
-fr\isen\projet\experience_management\interfaces\models\enums\REVIEW.class
 fr\isen\projet\experience_management\interfaces\models\MemoryModel.class
-fr\isen\projet\experience_management\interfaces\models\enums\MEMORYCATEGORY.class
 fr\isen\projet\experience_management\interfaces\models\FeedbackModel.class
 fr\isen\projet\experience_management\interfaces\services\FeedbackService.class
 fr\isen\projet\experience_management\interfaces\services\MemoryService.class
