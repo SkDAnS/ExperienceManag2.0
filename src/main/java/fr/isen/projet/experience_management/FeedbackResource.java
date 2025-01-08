@@ -139,11 +139,14 @@ public class FeedbackResource {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            boolean success = insertFeedbackData(feedbackData);
+            String idFeedback = UUID.randomUUID().toString(); // Génère un UUID pour idFeedback
+            boolean success = insertFeedbackData(feedbackData,idFeedback);
+
 
             if (success) {
                 response.put("status", "success");
                 response.put("message", "Feedback ajouté avec succès.");
+                response.put("idFeedback",idFeedback);
             } else {
                 response.put("status", "error");
                 response.put("message", "Échec de l'ajout du feedback.");
@@ -163,11 +166,10 @@ public class FeedbackResource {
         }
     }
 
-    private boolean insertFeedbackData(Map<String, Object> feedbackData) throws Exception {
+    private boolean insertFeedbackData(Map<String, Object> feedbackData,String idFeedback) throws Exception {
         String sql = "INSERT INTO FeedbackModel (idFeedback, title, dateCreated, review, image, views, dateUpdated, idUser, idOrder, category) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        String idFeedback = UUID.randomUUID().toString(); // Génère un UUID pour idFeedback
         String publicationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")); // Format compatible avec MySQL
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
