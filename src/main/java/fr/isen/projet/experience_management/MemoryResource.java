@@ -14,9 +14,9 @@ import java.awt.Desktop;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -53,6 +53,7 @@ public class MemoryResource {
     public String getMemoryById(@PathParam("idMemory") String idMemory) throws JsonProcessingException {
         Map<String, Object> memory = new HashMap<>();
         try {
+            incrementViews(idMemory); // Increment views before fetching the memory
             memory = getMemoryByIdData(idMemory);
 
             // Vérifier si une image existe avant d'essayer de l'ouvrir
@@ -68,6 +69,20 @@ public class MemoryResource {
 
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(memory);
+    }
+
+    private void incrementViews(String idMemory) throws Exception {
+        String sql = "UPDATE MemoryModel SET views = views + 1 WHERE idMemory = ?";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, idMemory);
+                statement.executeUpdate();
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors de l'incrémentation des vues : " + e.getMessage());
+            throw e;
+        }
     }
 
     @POST
@@ -96,8 +111,8 @@ public class MemoryResource {
             String publicationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
             try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-                String sql = "INSERT INTO MemoryModel (idMemory, title, publicationDate, category, description, place, hashtag, share, tag, idOrder, idUser, image) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO MemoryModel (idMemory, title, publicationDate, category, description, place, hashtag, share, tag, idOrder, idUser, image, views) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                     preparedStatement.setString(1, idMemory);
                     preparedStatement.setString(2, title);
@@ -319,5 +334,6 @@ public class MemoryResource {
         }
     }
 }
+
 
 
