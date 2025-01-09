@@ -15,9 +15,6 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.print.DocFlavor;
-
-
 @Path("/feedback")
 public class FeedbackResource {
 
@@ -80,8 +77,8 @@ public class FeedbackResource {
     public String getFeedbackById(@PathParam("idFeedback") String id) throws JsonProcessingException {
         Map<String, Object> feedback = null;
         try {
-
-            feedback = getFeedbackDataById(id); // Implémentez cette méthode pour récupérer les données par ID
+            incrementViews(id); // Incrémenter les vues avant de récupérer les données
+            feedback = getFeedbackDataById(id);
             // Vérifier si une image existe avant d'essayer de l'ouvrir
             if (feedback.containsKey("image") && feedback.get("image") != null) {
                 String imageUrls = (String) feedback.get("image");
@@ -95,6 +92,20 @@ public class FeedbackResource {
 
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(feedback);
+    }
+
+    private void incrementViews(String idFeedback) throws Exception {
+        String sql = "UPDATE FeedbackModel SET views = views + 1 WHERE idFeedback = ?";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, idFeedback);
+                statement.executeUpdate();
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors de l'incrémentation des vues : " + e.getMessage());
+            throw e;
+        }
     }
 
     private Map<String, Object> getFeedbackDataById(String id) throws Exception {
@@ -139,9 +150,8 @@ public class FeedbackResource {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            String idFeedback = UUID.randomUUID().toString(); // Génère un UUID pour idFeedback
+            String idFeedback = UUID.randomUUID().toString();
             boolean success = insertFeedbackData(feedbackData,idFeedback);
-
 
             if (success) {
                 response.put("status", "success");
