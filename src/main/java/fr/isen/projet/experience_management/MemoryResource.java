@@ -298,9 +298,9 @@ public class MemoryResource {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String sql = "SELECT mm.idMemory, mm.title, mm.publicationDate, mm.views, mm.image, mm.description, mm.place, mm.hashtag, mm.tag, mm.share, " +
                     "mm.idOrder, mm.idUser, mm.category, mc.name AS categoryName, s.name AS shareType " +
-                    "FROM MemoryModel mm " +
-                    "JOIN MEMORYCATEGORY mc ON mm.category = mc.id " +
-                    "JOIN SHARE s ON mm.share = s.id WHERE mm.bDelete = FALSE";
+                    "FROM memorymodel mm " +
+                    "JOIN memorycategory mc ON mm.category = mc.id " +
+                    "JOIN share s ON mm.share = s.id WHERE mm.bDelete = FALSE";
             try (PreparedStatement memoryStatement = connection.prepareStatement(sql);
                  ResultSet memoryResult = memoryStatement.executeQuery()) {
 
@@ -336,9 +336,9 @@ public class MemoryResource {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String sql = "SELECT mm.idMemory, mm.title, mm.publicationDate, mm.views, mm.image, mm.description, mm.place, mm.hashtag, mm.tag, mm.share, " +
                     "mm.idOrder, mm.idUser, mm.category, mc.name AS categoryName, s.name AS shareType " +
-                    "FROM MemoryModel mm " +
-                    "JOIN MEMORYCATEGORY mc ON mm.category = mc.id " +
-                    "JOIN SHARE s ON mm.share = s.id " +
+                    "FROM memorymodel mm " +
+                    "JOIN memorymodel mc ON mm.category = mc.id " +
+                    "JOIN share s ON mm.share = s.id " +
                     "WHERE mm.idMemory = ? AND mm.bDelete = FALSE";
             try (PreparedStatement memoryStatement = connection.prepareStatement(sql)) {
                 memoryStatement.setString(1, idMemory);

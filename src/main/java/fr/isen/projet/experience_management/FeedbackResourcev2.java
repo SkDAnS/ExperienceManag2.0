@@ -374,7 +374,7 @@ public class FeedbackResourcev2 {
     }
 
     private void incrementViews(String idFeedback) throws Exception {
-        String sql = "UPDATE FeedbackModel SET views = views + 1 WHERE idFeedback = ?";
+        String sql = "UPDATE feedbackmodel SET views = views + 1 WHERE idFeedback = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
