@@ -73,8 +73,8 @@ public class FeedbackResourcev2 {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Requête SQL pour récupérer tous les retours utilisateurs
             String sql = "SELECT fm.idFeedback, fm.title, fm.dateCreated, fm.review, fm.image, fm.views, fm.dateUpdated, fm.idUser, fm.idOrder, fc.name AS category " +
-                    "FROM FeedbackModel fm " +
-                    "JOIN FEEDBACKCATEGORY fc ON fm.category = fc.id";
+                    "FROM feedbackmodel fm " +
+                    "JOIN feedbackcategory fc ON fm.category = fc.id";
             try (Statement feedbackStatement = connection.createStatement();
                  ResultSet feedbackResult = feedbackStatement.executeQuery(sql)) {
 
@@ -152,8 +152,8 @@ public class FeedbackResourcev2 {
     private Map<String, Object> getFeedbackDataById(String idFeedback) throws Exception {
         Map<String, Object> feedback = new HashMap<>();
         String sql = "SELECT fm.idFeedback, fm.title, fm.dateCreated, fm.review, fm.image, fm.views, fm.dateUpdated, fm.idUser, fm.idOrder, fc.name AS category " +
-                "FROM FeedbackModel fm " +
-                "JOIN FEEDBACKCATEGORY fc ON fm.category = fc.id " +
+                "FROM feedbackfodel fm " +
+                "JOIN feedbackcategory fc ON fm.category = fc.id " +
                 "WHERE fm.idFeedback = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
@@ -231,7 +231,7 @@ public class FeedbackResourcev2 {
     }
 
     private boolean insertFeedbackData(String idFeedback, Map<String, Object> feedbackData) throws Exception {
-        String sql = "INSERT INTO FeedbackModel (idFeedback, title, dateCreated, review, image, category, views, dateUpdated, idUser, idOrder, bDelete) " +
+        String sql = "INSERT INTO feedbackmodel (idFeedback, title, dateCreated, review, image, category, views, dateUpdated, idUser, idOrder, bDelete) " +
                 "VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, ?, false)";
 
         // Obtenir la date actuelle
@@ -300,7 +300,7 @@ public class FeedbackResourcev2 {
     }
 
     private boolean updateFeedbackData(String idFeedback, Map<String, Object> feedbackData) throws Exception {
-        String sql = "UPDATE FeedbackModel SET title = ?, review = ?, image = ?, category = ?, dateUpdated = ? WHERE idFeedback = ?";
+        String sql = "UPDATE feedbackmodel SET title = ?, review = ?, image = ?, category = ?, dateUpdated = ? WHERE idFeedback = ?";
         String publicationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
@@ -358,7 +358,7 @@ public class FeedbackResourcev2 {
     }
 
     private boolean deleteFeedbackData(String idFeedback) throws Exception {
-        String sql = "DELETE FROM FeedbackModel WHERE idFeedback = ?";
+        String sql = "DELETE FROM feedbackmodel WHERE idFeedback = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
