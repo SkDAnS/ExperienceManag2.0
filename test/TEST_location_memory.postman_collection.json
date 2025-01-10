@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "9007beb6-a047-4f45-9da8-68bd9545d890",
+		"name": "TEST_location_memory",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31182341"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8081/memory/ef262cd3-a7a6-43c6-a3a7-17bed804f3b8",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/me/memory",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"me",
+						"memory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/memory/ef262cd3-a7a6-43c6-a3a7-17bed804f3b8 Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"New Memory\",\r\n    \"publicationDate\": \"2025-01-10\",\r\n    \"category\": 1,\r\n    \"description\": \"A beautiful day in Paris.\",\r\n    \"place\": \"Paris\",\r\n    \"hashtag\": \"#travel\",\r\n    \"share\": 1,\r\n    \"tag\": \"vacation,paris\",\r\n    \"idOrder\": \"order15\",\r\n    \"idUser\": \"user20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/me/mid/location/bdc53e2f-fe41-4331-bbe3-d22af1af27e7/memory/9e9ffd2f-cf30-11ef-a10d-88a4c2dd7980",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"me",
+						"mid",
+						"location",
+						"bdc53e2f-fe41-4331-bbe3-d22af1af27e7",
+						"memory",
+						"9e9ffd2f-cf30-11ef-a10d-88a4c2dd7980"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/memory/ef262cd3-a7a6-43c6-a3a7-17bed804f3b8 Copy 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Sample Title\",\r\n    \"category\": 1,\r\n    \"description\": \"Sample Description\",\r\n    \"place\": \"Sample Place\",\r\n    \"hashtag\": \"#example\",\r\n    \"share\": 1,\r\n    \"tag\": \"example\",\r\n    \"idOrder\": \"order123\",\r\n    \"idUser\": \"user123\",\r\n    \"image\": \"https://www.anthedesign.fr/wp-content/uploads/2017/01/Futura-sciences-e1485021154215.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/me/location/bdc53e2f-fe41-4331-bbe3-d22af1af27e7/memory/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"me",
+						"location",
+						"bdc53e2f-fe41-4331-bbe3-d22af1af27e7",
+						"memory",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/memory/ef262cd3-a7a6-43c6-a3a7-17bed804f3b8 Copy 3",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Sample Title\",\r\n    \"category\": 1,\r\n    \"description\": \"Sample Description\",\r\n    \"place\": \"Sample Place\",\r\n    \"hashtag\": \"#example\",\r\n    \"share\": 1,\r\n    \"tag\": \"example\",\r\n    \"idOrder\": \"order123\",\r\n    \"idUser\": \"user123\",\r\n    \"image\": \"https://www.anthedesign.fr/wp-content/uploads/2017/01/Futura-sciences-e1485021154215.jpg\"\r\n}\r\n\r\n\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/me/mid/location/bdc53e2f-fe41-4331-bbe3-d22af1af27e7/memory/9756ee7b-6203-4a25-b8ba-ee9526d27f09",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"me",
+						"mid",
+						"location",
+						"bdc53e2f-fe41-4331-bbe3-d22af1af27e7",
+						"memory",
+						"9756ee7b-6203-4a25-b8ba-ee9526d27f09"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/memory/ef262cd3-a7a6-43c6-a3a7-17bed804f3b8 Copy 4",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"test put test\",\r\n    \"image\": \"test.jpg\",\r\n    \"publicationDate\": \"2025-01-10\",\r\n    \"category\": 1,\r\n    \"description\": \"A beautiful day in Paris.\",\r\n    \"place\": \"Paris\",\r\n    \"hashtag\": \"#travel\",\r\n    \"share\": 1,\r\n    \"tag\": \"vacation,paris\",\r\n    \"idOrder\": \"order15\",\r\n    \"idUser\": \"user20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/me/mid/location/bdc53e2f-fe41-4331-bbe3-d22af1af27e7/memory/9756ee7b-6203-4a25-b8ba-ee9526d27f09",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"me",
+						"mid",
+						"location",
+						"bdc53e2f-fe41-4331-bbe3-d22af1af27e7",
+						"memory",
+						"9756ee7b-6203-4a25-b8ba-ee9526d27f09"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -46,24 +46,19 @@ public class statusResource {
     private Map<String, Long> getTableCounts() throws Exception {
         Map<String, Long> tableCounts = new HashMap<>();
 
+        // Liste des tables à inclure
+        String[] tables = {"memorymodel", "feedbackmodel"};
+
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            // Récupérer la liste des tables
-            try (Statement tableStatement = connection.createStatement();
-                 ResultSet tables = tableStatement.executeQuery("SHOW TABLES")) {
+            for (String tableName : tables) {
+                try (Statement countStatement = connection.createStatement();
+                     ResultSet countResult = countStatement.executeQuery("SELECT COUNT(*) FROM `" + tableName + "`")) {
 
-                while (tables.next()) {
-                    String tableName = tables.getString(1);
-
-                    // Effectuer un COUNT() pour chaque table avec une nouvelle instance de Statement
-                    try (Statement countStatement = connection.createStatement();
-                         ResultSet countResult = countStatement.executeQuery("SELECT COUNT(*) FROM `" + tableName + "`")) {
-
-                        if (countResult.next()) {
-                            tableCounts.put(tableName, countResult.getLong(1));
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Erreur lors du comptage pour la table " + tableName + ": " + e.getMessage());
+                    if (countResult.next()) {
+                        tableCounts.put(tableName, countResult.getLong(1));
                     }
+                } catch (Exception e) {
+                    System.err.println("Erreur lors du comptage pour la table " + tableName + ": " + e.getMessage());
                 }
             }
         } catch (Exception e) {
@@ -73,8 +68,4 @@ public class statusResource {
 
         return tableCounts;
     }
-
-
-
-
 }

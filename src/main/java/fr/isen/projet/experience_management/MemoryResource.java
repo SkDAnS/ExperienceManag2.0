@@ -12,7 +12,7 @@ import java.util.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Path("/fe/{type}/{id}/memory")
+@Path("/me")
 public class MemoryResource {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/projet";
@@ -54,17 +54,12 @@ public class MemoryResource {
     }
 
     @GET
+    @Path("/memory")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMemories(@PathParam("type") String type, @PathParam("id") String id) throws JsonProcessingException {
-        if (!isEntityValid(type, id)) {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("{\"message\":\"Invalid " + type + " ID!\"}")
-                    .build();
-        }
-
+    public Response getAllMemories() throws JsonProcessingException {
         List<Map<String, Object>> memoryList = new ArrayList<>();
         try {
-            memoryList = getAllMemories();
+            memoryList = getAllMemoriesData();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,52 +68,11 @@ public class MemoryResource {
         return Response.ok(objectMapper.writeValueAsString(memoryList)).build();
     }
 
-    @GET
-    @Path("/{idMemory}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMemoryById(@PathParam("type") String type, @PathParam("id") String id, @PathParam("idMemory") String idMemory) throws JsonProcessingException {
-        if (!isEntityValid(type, id)) {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("{\"message\":\"Invalid " + type + " ID!\"}")
-                    .build();
-        }
-
-        Map<String, Object> memory = new HashMap<>();
-        try {
-            incrementViews(idMemory);
-            memory = getMemoryByIdData(idMemory);
-
-            if (memory.containsKey("image") && memory.get("image") != null) {
-                String imageUrls = (String) memory.get("image");
-                if (!imageUrls.isEmpty()) {
-                    openImagesInBrowser(imageUrls);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        return Response.ok(objectMapper.writeValueAsString(memory)).build();
-    }
-
-    private void incrementViews(String idMemory) throws Exception {
-        String sql = "UPDATE MemoryModel SET views = views + 1 WHERE idMemory = ?";
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, idMemory);
-            statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
     @POST
+    @Path("/{type}/{idtype}/memory")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createMemory(@PathParam("type") String type, @PathParam("id") String id, Map<String, Object> memoryData) throws JsonProcessingException {
-        // Validate the entity type
+    public Response createMemory(@PathParam("type") String type, @PathParam("idtype") String id, Map<String, Object> memoryData) throws JsonProcessingException {
         if (!isEntityValid(type, id)) {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("{\"message\":\"Invalid " + type + " ID!\"}")
@@ -126,7 +80,6 @@ public class MemoryResource {
         }
 
         try {
-            // Extract data from JSON
             String title = (String) memoryData.get("title");
             Integer category = memoryData.containsKey("category") ? (Integer) memoryData.get("category") : null;
             String description = (String) memoryData.get("description");
@@ -138,7 +91,6 @@ public class MemoryResource {
             String idUser = (String) memoryData.get("idUser");
             String image = (String) memoryData.get("image");
 
-            // Validate required fields
             if (title == null || idUser == null || description == null) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"message\":\"Missing required fields! 'title', 'idUser', and 'description' are mandatory.\"}")
@@ -148,7 +100,6 @@ public class MemoryResource {
             String idMemory = UUID.randomUUID().toString();
             String publicationDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            // Insert data into the database
             try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
                 String sql = "INSERT INTO memorymodel (idMemory, title, publicationDate, category, views, image, description, place, hashtag, share, tag, idOrder, idUser, bDelete) "
                         + "VALUES (?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, FALSE)";
@@ -186,11 +137,6 @@ public class MemoryResource {
                     }
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"message\":\"Database error: " + e.getMessage() + "\"}")
-                    .build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -199,19 +145,40 @@ public class MemoryResource {
         }
     }
 
+    @GET
+    @Path("/mid/{type}/{idtype}/memory/{idMemory}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMemoryById(@PathParam("type") String type, @PathParam("idtype") String id, @PathParam("idMemory") String idMemory) throws JsonProcessingException {
+        if (!isEntityValid(type, id)) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("{\"message\":\"Invalid " + type + " ID!\"}")
+                    .build();
+        }
 
+        Map<String, Object> memory = new HashMap<>();
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            incrementViews(idMemory);
+            memory = getMemoryByIdData(idMemory);
 
+            if (memory.containsKey("image") && memory.get("image") != null) {
+                String imageUrls = (String) memory.get("image");
+                if (!imageUrls.isEmpty()) {
+                    openImagesInBrowser(imageUrls);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-
-
-
+        ObjectMapper objectMapper = new ObjectMapper();
+        return Response.ok(objectMapper.writeValueAsString(memory)).build();
+    }
 
     @PUT
-    @Path("/{idMemory}")
+    @Path("/mid/{type}/{idtype}/memory/{idMemory}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateMemory(@PathParam("type") String type, @PathParam("id") String id, @PathParam("idMemory") String idMemory, Map<String, Object> memoryData) throws JsonProcessingException {
-        // Validate the entity type
+    public Response updateMemory(@PathParam("type") String type, @PathParam("idtype") String id, @PathParam("idMemory") String idMemory, Map<String, Object> memoryData) throws JsonProcessingException {
         if (!isEntityValid(type, id)) {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("{\"message\":\"Invalid " + type + " ID!\"}")
@@ -219,7 +186,6 @@ public class MemoryResource {
         }
 
         try {
-            // Extract data from JSON
             String title = (String) memoryData.get("title");
             Integer category = memoryData.containsKey("category") ? (Integer) memoryData.get("category") : null;
             String description = (String) memoryData.get("description");
@@ -231,14 +197,12 @@ public class MemoryResource {
             String idUser = (String) memoryData.get("idUser");
             String image = (String) memoryData.get("image");
 
-            // Validate required fields
             if (title == null || idUser == null || description == null) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"message\":\"Missing required fields! 'title', 'idUser', and 'description' are mandatory.\"}")
                         .build();
             }
 
-            // Update data in the database
             try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
                 String sql = "UPDATE memorymodel SET title = ?, category = ?, description = ?, place = ?, hashtag = ?, share = ?, tag = ?, idOrder = ?, idUser = ?, image = ? WHERE idMemory = ? AND bDelete = FALSE";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -274,11 +238,6 @@ public class MemoryResource {
                     }
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"message\":\"Database error: " + e.getMessage() + "\"}")
-                    .build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -287,18 +246,10 @@ public class MemoryResource {
         }
     }
 
-
-
-
-
-
-
-
     @DELETE
-    @Path("/{idMemory}")
+    @Path("/mid/{type}/{idtype}/memory/{idMemory}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteMemory(@PathParam("type") String type, @PathParam("id") String id, @PathParam("idMemory") String idMemory) {
-        // Validate the entity type
+    public Response deleteMemory(@PathParam("type") String type, @PathParam("idtype") String id, @PathParam("idMemory") String idMemory) {
         if (!isEntityValid(type, id)) {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("{\"message\":\"Invalid " + type + " ID!\"}")
@@ -306,7 +257,6 @@ public class MemoryResource {
         }
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            // Soft delete the memory by setting bDelete to TRUE
             String sql = "UPDATE memorymodel SET bDelete = TRUE WHERE idMemory = ? AND bDelete = FALSE";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, idMemory);
@@ -322,11 +272,6 @@ public class MemoryResource {
                             .build();
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"message\":\"Database error: " + e.getMessage() + "\"}")
-                    .build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -335,8 +280,19 @@ public class MemoryResource {
         }
     }
 
+    private void incrementViews(String idMemory) throws Exception {
+        String sql = "UPDATE memorymodel SET views = views + 1 WHERE idMemory = ? AND bDelete = FALSE";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, idMemory);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
-    private List<Map<String, Object>> getAllMemories() throws Exception {
+    private List<Map<String, Object>> getAllMemoriesData() throws Exception {
         List<Map<String, Object>> memoryList = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
@@ -344,7 +300,7 @@ public class MemoryResource {
                     "mm.idOrder, mm.idUser, mm.category, mc.name AS categoryName, s.name AS shareType " +
                     "FROM MemoryModel mm " +
                     "JOIN MEMORYCATEGORY mc ON mm.category = mc.id " +
-                    "JOIN SHARE s ON mm.share = s.id";
+                    "JOIN SHARE s ON mm.share = s.id WHERE mm.bDelete = FALSE";
             try (PreparedStatement memoryStatement = connection.prepareStatement(sql);
                  ResultSet memoryResult = memoryStatement.executeQuery()) {
 
@@ -383,7 +339,7 @@ public class MemoryResource {
                     "FROM MemoryModel mm " +
                     "JOIN MEMORYCATEGORY mc ON mm.category = mc.id " +
                     "JOIN SHARE s ON mm.share = s.id " +
-                    "WHERE mm.idMemory = ?";
+                    "WHERE mm.idMemory = ? AND mm.bDelete = FALSE";
             try (PreparedStatement memoryStatement = connection.prepareStatement(sql)) {
                 memoryStatement.setString(1, idMemory);
                 try (ResultSet memoryResult = memoryStatement.executeQuery()) {
